@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Леди Баг и Супер Кот</title>
+    <style>
+        /* Общие стили */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('https://static.wixstatic.com/media/765e46_73d6807491654dae930a6481e6a25f3f~mv2.png/v1/fill/w_1440,h_900,al_c,q_90,enc_auto/765e46_73d6807491654dae930a6481e6a25f3f~mv2.png') repeat; /* Вставьте ссылку на ваше изображение */
+            color: #fff;
+            position: relative;
+        }
+
+        /* Заголовок */
+        header {
+            background-color: #e20000; /* Красный фон */
+            padding: 40px 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin: 0;
+            color: #ffcc00; /* Желтый цвет текста */
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Тень для текста */
+        }
+
+        header p {
+            font-size: 1.5em;
+            margin-top: 10px;
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+        }
+
+  /* Ссылка для авторизации в правом верхнем углу */
+        .auth-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #ffcc00;
+            font-size: 1.2em;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: rgba(0, 0, 0, 0.7);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .auth-link:hover {
+            background-color: #ffcc00;
+            color: #000;
+        }
+
+
+        /* Контейнер для контента */
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+        /* Стили для блока персонажей */
+        .character-info {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .character {
+            text-align: center;
+            width: 45%;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .character:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .character img {
+            width: 80%;
+            max-width: 300px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .character img:hover {
+            transform: scale(1.1);
+        }
+
+        .character h2 {
+            font-size: 2em;
+            color: #ffcc00;
+            margin-bottom: 10px;
+        }
+
+        .character p {
+            font-size: 1.1em;
+            line-height: 1.5;
+            color: #ddd;
+        }
+
+        /* Дополнительные стили для блока злодея */
+        .villain-info {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 40px;
+        }
+
+        .villain-info h2 {
+            color: #ffcc00;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .villain-info img {
+            width: 50%;
+            max-width: 250px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .villain-info img:hover {
+            transform: scale(1.1);
+        }
+
+        .villain-info p {
+            font-size: 1.2em;
+            color: #ddd;
+            line-height: 1.5;
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+/* Стили для заголовка "Хотите узнать больше?" */
+.links-title {
+    font-size: 1.6em; /* Уменьшаем размер текста */
+    color: #ffcc00; /* Желтый цвет текста */
+    text-align: center; /* Выравнивание по центру */
+    padding: 10px 20px; /* Меньшие отступы для аккуратности */
+    background: linear-gradient(45deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)); /* Градиентный фон для рамки */
+    border: 3px solid #ffcc00; /* Желтая рамка */
+    border-radius: 15px; /* Скругленные углы */
+    display: inline-block; /* Чтобы рамка обвивала только текст */
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5); /* Мягкая тень для текста */
+    margin-bottom: 20px; /* Отступ снизу */
+    transition: all 0.3s ease-in-out; /* Плавное изменение при наведении */
+}
+
+/* Эффект при наведении на заголовок */
+.links-title:hover {
+    background: rgba(0, 0, 0, 0.6); /* При наведении фон становится немного темнее */
+    transform: scale(1.05); /* Легкое увеличение при наведении */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6); /* Тень вокруг рамки при наведении */
+}
+
+/* Стили для ссылок внутри блока */
+.links a {
+    color: #ffcc00; /* Желтый цвет текста */
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.6); /* Полупрозрачный черный фон */
+    margin: 8px; /* Отступы между ссылками */
+    font-size: 1.1em; /* Немного увеличиваем шрифт для удобства */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Плавное изменение фона и цвета текста */
+}
+
+/* Эффект при наведении на ссылки */
+.links a:hover {
+    background-color: #ffcc00; /* Желтый фон при наведении */
+    color: #000; /* Черный цвет текста при наведении */
+}
+/* Стили для видео */
+        .trailer {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .trailer iframe {
+            width: 80%;
+            height: 500px;
+            border: none;
+            border-radius: 10px;
+        }
+
+        /* Стиль для заголовка трейлера */
+        .trailer h2 {
+            font-size: 2.5em; /* Увеличиваем размер текста */
+            color: #ffcc00; /* Желтый цвет текста */
+            margin-bottom: 20px;
+            padding: 15px; /* Отступы вокруг текста */
+            background-color: rgba(0, 0, 0, 0.5); /* Прозрачный черный фон */
+            border-radius: 10px; /* Скругленные углы */
+            border: 3px solid #ffcc00; /* Желтая рамка */
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Леди Баг и Супер Кот</h1>
+    <p>Секреты героев Парижа</p>
+
+ <!-- Ссылка для авторизации -->
+    <a href="login1.html" class="auth-link">Авторизация</a>
+
+</header>
+
+<div class="container">
+    <div class="character-info">
+        <div class="character">
+            <h2>Леди Баг</h2>
+            <img src="https://i.pinimg.com/236x/8d/b6/02/8db6027935b654d7663bdcf132582b55.jpg?nii=t" alt="Леди Баг">
+            <p>Маринетт Дюпен-Чен — обычная школьница, которая с помощью магического амулета превращается в Леди Баг, защитницу Парижа. Она борется с суперзлодеями, спасая город от их разрушительных планов. Ее силы связаны с удачей и ловкостью.</p>
+        </div>
+
+        <div class="character">
+            <h2>Супер Кот</h2>
+            <img src="https://i.pinimg.com/originals/29/67/3b/29673bec35855b5fbee8f9d482eff1ce.png" alt="Супер Кот">
+            <p>Адриан Агрест — друг Маринетт и одновременно Супер Кот, супергерой, который сражается вместе с Леди Баг, защищая Париж. Его суперспособности включают агилность, силу кошки и способность призывать кошачий шлем для защиты.</p>
+        </div>
+    </div>
+
+    <!-- Информация о Бражнике -->
+    <div class="villain-info">
+        <h2>Бражник</h2>
+        <img src="https://i0.wp.com/pbs.twimg.com/media/FWnSsF0XwAALTsw.jpg?ssl=1" alt="Бражник">
+        <p>Бражник (Габриэль Агрест) — главный антагонист сериала. Он использует силу талисмана бабочки для превращения людей в злодеев, называемых "акумами". Его главная цель — получить могущественные силы, чтобы оживить свою жену, Эмили.</p>
+    </div>
+
+  <!-- Информация о борьбе с Бражником -->
+    <div class="villain-info">
+        <h2>Сражение с Бражником</h2>
+        <p>Леди Баг и Супер Кот часто сталкиваются с главным антагонистом, Бражником (Габриэлем Агрест), который пытается захватить волшебные силы и создать опасных злодеев для борьбы с героями. В их схватках Леди Баг всегда использует свою силу удачи и ловкости, а Супер Кот — свою силу кошки и остроумие. Их союз помогает победить коварные планы Бражника и сохранить безопасность Парижа. Но в конце 5-го сезона Бражнику удалось одалеть наших героев, Леди Баг отчайно пыталась предотвратить его победу, но у нее не получилось.</p>
+    </div>
+
+    <!-- Ссылки на статьи -->
+    <div class="links">
+    <h2 class="links-title">Хотите узнать больше?</h2>
+    <a href="https://en.wikipedia.org/wiki/Miraculous_Ladybug" target="_blank">Википедия: Леди Баг</a>
+    <a href="https://www.miraculousladybug.tv/" target="_blank">Официальный сайт</a>
+    <a href="https://www.imdb.com/title/tt4574334/" target="_blank">IMDB: Леди Баг и Супер Кот</a>
+</div>
+
+
+<!-- Трейлер сериала -->
+<div class="trailer">
+    <h2>Посмотрите трейлер сериала:</h2>
+    <iframe src="https://www.youtube.com/embed/cd6tG6VB8FA" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+</html>
